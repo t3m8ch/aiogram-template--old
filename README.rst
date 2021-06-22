@@ -12,7 +12,7 @@ Template for creating Python telegram bots using the Aiogram library. 🐍
         git clone https://github.com/t3m8ch/aiogram-template.git
         cd aiogram-template
 
-#. Rename **.exapmple.env** to **.env** 🔄
+#. Rename **.example.env** to **.env** 🔄
 
     ::
 
