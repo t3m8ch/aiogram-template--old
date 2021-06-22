@@ -1,0 +1,2 @@
+class PortMustBeNumberError(Exception):
+    pass
