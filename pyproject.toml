@@ -8,7 +8,7 @@ authors = ["Kudyakov Artem <t3m8ch@yandex.ru>"]
 python = "^3.9"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^6.2.4"
 
 [tool.poetry.scripts]
 bot = "aiogram_template.main:run"
