@@ -5,6 +5,11 @@ from typing import List, NamedTuple, Union, Optional
 from aiogram_template.errors import PortMustBeNumberError
 
 
+# Edit this
+LOG_LEVEL = logging.INFO
+LOG_FORMAT = "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+
+
 class LongPollingUpdateMethod:
     pass
 
@@ -118,7 +123,7 @@ def load_config() -> Config:
             parse_mode="HTML"
         ),
         logging=LogConfig(
-            level=logging.INFO,
-            format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+            level=LOG_LEVEL,
+            format=LOG_FORMAT
         )
     )
