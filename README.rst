@@ -16,7 +16,7 @@ Template for creating Python telegram bots using the Aiogram library. 🐍
 
     ::
 
-        mv .exapmple.env .env
+        mv .example.env .env
 
 #. Edit the **.env** file using a text editor 📋
 
