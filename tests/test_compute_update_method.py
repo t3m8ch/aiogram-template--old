@@ -32,8 +32,8 @@ def test_returns_webhook_if_all_right():
         webapp_port="3000"
     )
     expected = WebhookUpdateMethod(
-        host="localhost",
-        path="/path/to/bot",
+        webhook_host="localhost",
+        webhook_path="/path/to/bot",
         webapp_host="localhost",
         webapp_port=3000
     )

@@ -4,8 +4,8 @@ import logging
 import dotenv
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram_template.handlers import register_handlers
 
+from aiogram_template.handlers import register_handlers
 from aiogram_template import config
 
 

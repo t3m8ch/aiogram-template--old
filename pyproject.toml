@@ -8,6 +8,7 @@ authors = ["Kudyakov Artem <t3m8ch@yandex.ru>"]
 python = "^3.9"
 python-dotenv = "^0.18.0"
 aiogram = "^2.13"
+urlpath = "^1.1.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"

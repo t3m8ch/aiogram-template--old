@@ -2,6 +2,8 @@ import logging
 from os import getenv
 from typing import List, NamedTuple, Union, Optional
 
+from urlpath import URL
+
 from aiogram_template.errors import PortMustBeNumberError
 
 
@@ -15,30 +17,14 @@ class LongPollingUpdateMethod:
 
 
 class WebhookUpdateMethod(NamedTuple):
-    host: str
-    path: str
+    webhook_host: str
+    webhook_path: str
     webapp_host: str
     webapp_port: int
 
     @property
     def url(self) -> str:
-        # It would be possible to apply the Path class from pathlib.
-        # However, it doesn't fit:
-
-        #   >>> from pathlib import Path
-        #   >>> Path("localhost", "/path/to/bot")
-        #   Path("/path/to/bot")
-
-        # It would be possible to use a URL class from a third-party library called urlpath.
-        # However, that doesn't fit either:
-
-        #   >>> from urlpath import URL
-        #   >>> URL("localhost", "/path/to/bot")
-        #   URL("/path/to/bot")
-
-        host = self.host[:-1] if self.host[-1] == "/" else self.host
-        path = self.path[1:] if self.path[0] == "/" else self.path
-        return host + "/" + path
+        return str(URL(self.webhook_host, self.webhook_path))
 
 
 UpdateMethodType = Union[LongPollingUpdateMethod, WebhookUpdateMethod]
