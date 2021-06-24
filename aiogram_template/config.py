@@ -66,9 +66,9 @@ def get_admins_id() -> List[int]:
 
 def get_update_method() -> UpdateMethodType:
     webhook_host = getenv("WEBHOOK_HOST")
-    webhook_path = getenv("WEBHOOK_PATH")
-    webapp_host = getenv("WEBAPP_HOST")
-    webapp_port = getenv("WEBAPP_PORT")
+    webhook_path = getenv("WEBHOOK_PATH", "/bot")
+    webapp_host = getenv("WEBAPP_HOST", "localhost")
+    webapp_port = getenv("WEBAPP_PORT", "3000")
 
     return _compute_update_method(webhook_host,
                                   webhook_path,

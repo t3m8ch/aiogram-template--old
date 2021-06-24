@@ -29,7 +29,15 @@ Template for creating Python telegram bots using the Aiogram library. 🐍
         WEBAPP_HOST=Insert.web.application.host
         WEBAPP_PORT=Insert_web_application_port
 
-    If one of the last four parameters is not entered, long polling will be used
+    To use webhook, you only need to specify the environment variable **WEBHOOK_HOST**.
+    If this parameter is not specified, long polling is used. If you specify only
+    this parameter, it is the default:
+
+    ::
+
+        WEBHOOK_PATH=/bot
+        WEBAPP_HOST=localhost
+        WEBAPP_PORT=3000
 
 #. Install the necessary dependencies with the help of **poetry** 🔽
 
