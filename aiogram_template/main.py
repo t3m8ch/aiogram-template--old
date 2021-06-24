@@ -15,8 +15,7 @@ from aiogram_template import config
 
 def on_startup(cfg: Config):
     async def func(dp: Dispatcher):
-        update_method = type(cfg.tg.update_method)
-        if update_method == WebhookUpdateMethod:
+        if isinstance(cfg.tg.update_method, WebhookUpdateMethod):
             await dp.bot.set_webhook(cfg.tg.update_method.url)
 
         logging.warning("START BOT!")
@@ -57,7 +56,7 @@ def run():
     register_handlers(dp)
 
     # Start bot!
-    if type(cfg.tg.update_method) == LongPollingUpdateMethod:
+    if isinstance(cfg.tg.update_method, LongPollingUpdateMethod):
         executor.start_polling(
             dispatcher=dp,
             on_startup=on_startup(cfg),
@@ -65,7 +64,7 @@ def run():
             loop=event_loop
         )
 
-    elif type(cfg.tg.update_method) == WebhookUpdateMethod:
+    elif isinstance(cfg.tg.update_method, WebhookUpdateMethod):
         executor.start_webhook(
             dispatcher=dp,
             on_startup=on_startup(cfg),
