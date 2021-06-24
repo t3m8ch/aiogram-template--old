@@ -16,7 +16,7 @@ from aiogram_template import config
 def on_startup(cfg: Config):
     async def func(dp: Dispatcher):
         if isinstance(cfg.tg.update_method, WebhookUpdateMethod):
-            await dp.bot.set_webhook(cfg.tg.update_method.url)
+            await dp.bot.set_webhook(cfg.tg.update_method.webhook_url)
 
         logging.warning("START BOT!")
 

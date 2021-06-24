@@ -9,7 +9,7 @@ def test_url_property_if_host_is_https_1():
         webapp_port=3000
     )
 
-    actual = method.url
+    actual = method.webhook_url
     expected = "https://some.thing/path/to/bot"
     assert actual == expected
 
@@ -22,7 +22,7 @@ def test_url_property_if_host_is_https_2():
         webapp_port=3000
     )
 
-    actual = method.url
+    actual = method.webhook_url
     expected = "https://some.thing/path/to/bot"
     assert actual == expected
 
@@ -35,7 +35,7 @@ def test_url_property_if_host_is_https_3():
         webapp_port=3000
     )
 
-    actual = method.url
+    actual = method.webhook_url
     expected = "https://some.thing/path/to/bot"
     assert actual == expected
 
@@ -48,6 +48,6 @@ def test_url_property_if_host_is_https_4():
         webapp_port=3000
     )
 
-    actual = method.url
+    actual = method.webhook_url
     expected = "https://some.thing/path/to/bot"
     assert actual == expected

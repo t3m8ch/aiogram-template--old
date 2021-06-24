@@ -23,7 +23,7 @@ class WebhookUpdateMethod(NamedTuple):
     webapp_port: int
 
     @property
-    def url(self) -> str:
+    def webhook_url(self) -> str:
         return str(URL(self.webhook_host, self.webhook_path))
 
 
