@@ -43,8 +43,8 @@ class LogConfig(NamedTuple):
 
 
 class Config(NamedTuple):
-    telegram: TgConfig
-    logging: LogConfig
+    tg: TgConfig
+    log: LogConfig
 
 
 def get_token() -> str:
@@ -102,13 +102,13 @@ def _compute_update_method(webhook_host: Optional[str],
 
 def load_config() -> Config:
     return Config(
-        telegram=TgConfig(
+        tg=TgConfig(
             token=get_token(),
             admins_id=get_admins_id(),
             update_method=get_update_method(),
             parse_mode="HTML"
         ),
-        logging=LogConfig(
+        log=LogConfig(
             level=LOG_LEVEL,
             format=LOG_FORMAT
         )

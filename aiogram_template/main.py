@@ -15,9 +15,9 @@ from aiogram_template import config
 
 def on_startup(cfg: Config):
     async def func(dp: Dispatcher):
-        update_method = type(cfg.telegram.update_method)
+        update_method = type(cfg.tg.update_method)
         if update_method == WebhookUpdateMethod:
-            await dp.bot.set_webhook(cfg.telegram.update_method.url)
+            await dp.bot.set_webhook(cfg.tg.update_method.url)
 
         logging.warning("START BOT!")
 
@@ -40,16 +40,16 @@ def run():
 
     # Logging configuration
     logging.basicConfig(
-        level=cfg.logging.level,
-        format=cfg.logging.format
+        level=cfg.log.level,
+        format=cfg.log.format
     )
 
     # Base
     event_loop = asyncio.get_event_loop()
     storage = MemoryStorage()  # TODO: Redis
     bot = Bot(
-        token=cfg.telegram.token,
-        parse_mode=cfg.telegram.parse_mode
+        token=cfg.tg.token,
+        parse_mode=cfg.tg.parse_mode
     )
     dp = Dispatcher(bot, storage=storage)
 
@@ -57,7 +57,7 @@ def run():
     register_handlers(dp)
 
     # Start bot!
-    if type(cfg.telegram.update_method) == LongPollingUpdateMethod:
+    if type(cfg.tg.update_method) == LongPollingUpdateMethod:
         executor.start_polling(
             dispatcher=dp,
             on_startup=on_startup(cfg),
@@ -65,15 +65,15 @@ def run():
             loop=event_loop
         )
 
-    elif type(cfg.telegram.update_method) == WebhookUpdateMethod:
+    elif type(cfg.tg.update_method) == WebhookUpdateMethod:
         executor.start_webhook(
             dispatcher=dp,
             on_startup=on_startup(cfg),
             on_shutdown=on_shutdown,
             loop=event_loop,
-            webhook_path=cfg.telegram.update_method.webhook_path,
-            host=cfg.telegram.update_method.webapp_host,
-            port=cfg.telegram.update_method.webapp_port,
+            webhook_path=cfg.tg.update_method.webhook_path,
+            host=cfg.tg.update_method.webapp_host,
+            port=cfg.tg.update_method.webapp_port,
         )
 
 
