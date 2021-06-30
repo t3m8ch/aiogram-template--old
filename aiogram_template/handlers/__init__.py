@@ -2,9 +2,8 @@ from . import common
 
 
 def register_handlers(dp):
-    """A function that registers all handlers
+    """A function that registers all handlers.
     Example of registration of several handlers:
-    .. code-block:: python
 
        handlers = module1.handlers +
                   module2.handlers +
