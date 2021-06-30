@@ -1,115 +1,67 @@
 import logging
-from os import getenv
-from typing import List, NamedTuple, Union, Optional
+from enum import Enum
+from typing import Optional
 
+from pydantic import BaseSettings
 from urlpath import URL
 
-from aiogram_template.errors import PortMustBeNumberError
-
-
-# Edit this
-LOG_LEVEL = logging.INFO
+# Edit this!
+PARSE_MODE = "HTML"
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
 
-
-class LongPollingUpdateMethod:
-    pass
+DEFAULT_DB_URL = "postgresql+asyncpg://localhost/telegram_bot"
 
 
-class WebhookUpdateMethod(NamedTuple):
-    webhook_host: str
-    webhook_path: str
-    webapp_host: str
-    webapp_port: int
+class UpdateMethod(str, Enum):
+    WEBHOOKS = "webhooks"
+    LONG_POLLING = "long_polling"
+
+
+class LogLevel(int, Enum):
+    CRITICAL = logging.CRITICAL
+    FATAL = logging.FATAL
+    ERROR = logging.ERROR
+    WARNING = logging.WARNING
+    WARN = logging.WARN
+    INFO = logging.INFO
+    DEBUG = logging.DEBUG
+
+
+class Config(BaseSettings):
+    tg_token: str
+    tg_admins_id: str
+    tg_webhook_host: Optional[str]
+    tg_webhook_path: str = "/bot"
+
+    webapp_host: str = "localhost"
+    webapp_port: int = 3000
+
+    log_level: LogLevel = LogLevel.INFO
+
+    db_url: str = DEFAULT_DB_URL
 
     @property
-    def webhook_url(self) -> str:
-        return str(URL(self.webhook_host, self.webhook_path))
+    def tg_update_method(self) -> UpdateMethod:
+        return UpdateMethod.LONG_POLLING if not self.tg_webhook_host else UpdateMethod.WEBHOOKS
+
+    @property
+    def tg_webhook_url(self) -> str:
+        return str(URL(self.tg_webhook_host, self.tg_webhook_path))
+
+    @property
+    def tg_parse_mode(self) -> str:
+        # PARSE_MODE must be specified in the code, because the way
+        # the message is parsed directly affects the code
+        return PARSE_MODE
+
+    @property
+    def log_format(self):
+        # LOG_FORMAT must be specified in the code,
+        # because The format depends on the logging library used
+        return LOG_FORMAT
 
 
-UpdateMethodType = Union[LongPollingUpdateMethod, WebhookUpdateMethod]
-
-
-class TgConfig(NamedTuple):
-    token: str
-    admins_id: List[int]
-    update_method: UpdateMethodType
-    parse_mode: str
-
-
-class LogConfig(NamedTuple):
-    level: int
-    format: str
-
-
-class Config(NamedTuple):
-    tg: TgConfig
-    log: LogConfig
-
-
-def get_token() -> str:
-    tg_token = getenv("TG_TOKEN")
-    assert tg_token is not None, "TG_TOKEN is not set"
-    return tg_token
-
-
-def get_admins_id() -> List[int]:
-    admins_id = getenv("ADMINS_ID")
-    assert admins_id is not None, "ADMINS_ID is not set"
-
-    admins_id = admins_id.split(",")
-    for id in admins_id:
-        assert id.isnumeric(), "ADMINS_ID must be a number"
-
-    return list(map(int, admins_id))
-
-
-def get_update_method() -> UpdateMethodType:
-    webhook_host = getenv("WEBHOOK_HOST")
-    webhook_path = getenv("WEBHOOK_PATH", "/bot")
-    webapp_host = getenv("WEBAPP_HOST", "localhost")
-    webapp_port = getenv("WEBAPP_PORT", "3000")
-
-    return _compute_update_method(webhook_host,
-                                  webhook_path,
-                                  webapp_host,
-                                  webapp_port)
-
-
-def _compute_update_method(webhook_host: Optional[str],
-                           webhook_path: Optional[str],
-                           webapp_host: Optional[str],
-                           webapp_port: Optional[str]) -> UpdateMethodType:
-    """A pure function that creates UpdateMethodType. Created for unit testing"""
-    if any(env is None for env in (webhook_host,
-                                   webhook_path,
-                                   webapp_host,
-                                   webapp_port)):
-        return LongPollingUpdateMethod()
-
-    if not webapp_port.isnumeric():
-        raise PortMustBeNumberError()
-
-    webapp_port = int(webapp_port)
-
-    return WebhookUpdateMethod(
-        webhook_host,
-        webhook_path,
-        webapp_host,
-        webapp_port
-    )
-
-
-def load_config() -> Config:
-    return Config(
-        tg=TgConfig(
-            token=get_token(),
-            admins_id=get_admins_id(),
-            update_method=get_update_method(),
-            parse_mode="HTML"
-        ),
-        log=LogConfig(
-            level=LOG_LEVEL,
-            format=LOG_FORMAT
-        )
-    )
+config = Config(
+    _env_file=".env",
+    _env_file_encoding="utf-8"
+)

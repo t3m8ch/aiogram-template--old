@@ -1,26 +1,19 @@
 import asyncio
 import logging
 
-import dotenv
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.utils import executor
 
-from aiogram_template.config import LongPollingUpdateMethod, \
-    WebhookUpdateMethod, Config
-
+from aiogram_template.config import config, UpdateMethod
 from aiogram_template.handlers import register_handlers
-from aiogram_template import config
 
 
-def on_startup(cfg: Config):
-    async def func(dp: Dispatcher):
-        if isinstance(cfg.tg.update_method, WebhookUpdateMethod):
-            await dp.bot.set_webhook(cfg.tg.update_method.webhook_url)
+async def on_startup(dp: Dispatcher):
+    if config.tg_update_method == UpdateMethod.WEBHOOKS:
+        await dp.bot.set_webhook(config.tg_webhook_url)
 
-        logging.warning("START BOT!")
-
-    return func
+    logging.warning("START BOT!")
 
 
 async def on_shutdown(dp: Dispatcher):
@@ -33,22 +26,18 @@ async def on_shutdown(dp: Dispatcher):
 
 
 def run():
-    # Get config
-    dotenv.load_dotenv()
-    cfg = config.load_config()
-
     # Logging configuration
     logging.basicConfig(
-        level=cfg.log.level,
-        format=cfg.log.format
+        level=config.log_level,
+        format=config.log_format
     )
 
     # Base
     event_loop = asyncio.get_event_loop()
     storage = MemoryStorage()  # TODO: Redis
     bot = Bot(
-        token=cfg.tg.token,
-        parse_mode=cfg.tg.parse_mode
+        token=config.tg_token,
+        parse_mode=config.tg_parse_mode
     )
     dp = Dispatcher(bot, storage=storage)
 
@@ -56,23 +45,25 @@ def run():
     register_handlers(dp)
 
     # Start bot!
-    if isinstance(cfg.tg.update_method, LongPollingUpdateMethod):
+    if config.tg_update_method == UpdateMethod.LONG_POLLING:
         executor.start_polling(
             dispatcher=dp,
-            on_startup=on_startup(cfg),
-            on_shutdown=on_shutdown,
-            loop=event_loop
-        )
-
-    elif isinstance(cfg.tg.update_method, WebhookUpdateMethod):
-        executor.start_webhook(
-            dispatcher=dp,
-            on_startup=on_startup(cfg),
+            on_startup=on_startup,
             on_shutdown=on_shutdown,
             loop=event_loop,
-            webhook_path=cfg.tg.update_method.webhook_path,
-            host=cfg.tg.update_method.webapp_host,
-            port=cfg.tg.update_method.webapp_port,
+            skip_updates=True
+        )
+
+    elif config.tg_update_method == UpdateMethod.WEBHOOKS:
+        executor.start_webhook(
+            dispatcher=dp,
+            on_startup=on_startup,
+            on_shutdown=on_shutdown,
+            loop=event_loop,
+            webhook_path=config.tg_webhook_path,
+            host=config.webapp_host,
+            port=config.webapp_port,
+            skip_updates=True
         )
 
 
