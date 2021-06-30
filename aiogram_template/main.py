@@ -5,8 +5,8 @@ from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.utils import executor
 
-from aiogram_template.config import config, UpdateMethod
-from aiogram_template.handlers import register_handlers
+from config import config, UpdateMethod
+from handlers import register_handlers
 
 
 async def on_startup(dp: Dispatcher):

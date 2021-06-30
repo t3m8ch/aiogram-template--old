@@ -1,4 +1,4 @@
-from aiogram_template.handlers import common
+from . import common
 
 
 def register_handlers(dp):
