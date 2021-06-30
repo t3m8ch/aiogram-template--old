@@ -1,4 +1,4 @@
-import logging
+import logging as log
 from enum import Enum
 from typing import Optional
 
@@ -18,13 +18,13 @@ class UpdateMethod(str, Enum):
 
 
 class LogLevel(int, Enum):
-    CRITICAL = logging.CRITICAL
-    FATAL = logging.FATAL
-    ERROR = logging.ERROR
-    WARNING = logging.WARNING
-    WARN = logging.WARN
-    INFO = logging.INFO
-    DEBUG = logging.DEBUG
+    CRITICAL = log.CRITICAL
+    FATAL = log.FATAL
+    ERROR = log.ERROR
+    WARNING = log.WARNING
+    WARN = log.WARN
+    INFO = log.INFO
+    DEBUG = log.DEBUG
 
 
 class Config(BaseSettings):

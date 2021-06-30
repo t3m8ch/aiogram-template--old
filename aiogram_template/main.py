@@ -1,5 +1,5 @@
 import asyncio
-import logging
+import logging as log
 
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -13,7 +13,7 @@ async def on_startup(dp: Dispatcher):
     if config.tg_update_method == UpdateMethod.WEBHOOKS:
         await dp.bot.set_webhook(config.tg_webhook_url)
 
-    logging.warning("START BOT!")
+    log.warning("START BOT!")
 
 
 async def on_shutdown(dp: Dispatcher):
@@ -22,12 +22,12 @@ async def on_shutdown(dp: Dispatcher):
     await dp.storage.close()
     await dp.storage.wait_closed()
 
-    logging.warning("BOT STOPPED!")
+    log.warning("BOT STOPPED!")
 
 
 def run():
     # Logging configuration
-    logging.basicConfig(
+    log.basicConfig(
         level=config.log_level,
         format=config.log_format
     )
