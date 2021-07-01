@@ -1,4 +1,4 @@
-from . import common
+from . import general
 
 
 def register_handlers(dp):
@@ -14,6 +14,6 @@ def register_handlers(dp):
 
     Remember that the order of handlers is important!
     """
-    handlers = common.handlers
+    handlers = general.handlers
     for handler in handlers:
         handler(dp)
