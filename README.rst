@@ -46,4 +46,4 @@ Template for creating Python telegram bots using the Aiogram library. 🐍
 
     ::
 
-        poetry run bot
+        poetry run python3 bot
