@@ -3,6 +3,7 @@ Description=Telegram bot
 After=network.target
 # Requires=postgresql.service
 # Requires=redis-server.service
+# Requires=nginx.service
 
 [Service]
 User=bot
