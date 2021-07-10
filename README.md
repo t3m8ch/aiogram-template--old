@@ -22,13 +22,21 @@ If you use webhooks and use the minimal example,
 you need to add the **TG_WEBHOOK_HOST** parameter,
 which specifies the host to which Telegram will send requests.
 
+If you want to use **Redis** to store the states, specify the **REDIS_HOST** 
+parameter. Otherwise **MemoryStorage** will be used.
+
 Default values:
 ```dotenv
 TG_SKIP_UPDATES=NO
 TG_WEBHOOK_PATH=/bot
+
 WEBAPP_HOST=localhost
 WEBAPP_PORT=3000
+
 LOG_LEVEL=INFO
+
+REDIS_PORT=6379
+
 DB_URL="postgresql+asyncpg://localhost/telegram_bot"
 ```
 

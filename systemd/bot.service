@@ -1,0 +1,17 @@
+[Unit]
+Description=Telegram bot
+After=network.target
+# Requires=postgresql.service
+# Requires=redis-server.service
+# Requires=nginx.service
+
+[Service]
+User=bot
+Environment="PATH=/home/%paste_your_name%/.poetry/bin:/usr/local/bin:/usr/bin:/bin:/usr/games"
+Type=simple
+WorkingDirectory=/home/%paste_your_name%/bot
+ExecStart=/home/%paste_your_name%/.poetry/bin/poetry run python3 /home/%paste_your_name%/bot/bot
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
