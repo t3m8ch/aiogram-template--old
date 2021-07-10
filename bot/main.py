@@ -1,17 +1,27 @@
 import asyncio
 import logging as log
+import ssl
 
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.utils import executor
 
-from config import config, UpdateMethod
+from bot.utils.config import config, UpdateMethod
 from handlers import register_handlers
 
 
 async def on_startup(dp: Dispatcher):
     if config.tg_update_method == UpdateMethod.WEBHOOKS:
-        await dp.bot.set_webhook(config.tg_webhook_url)
+        if config.ssl_is_set:
+            with open(config.ssl_certificate_path, 'rb') as file:
+                ssl_certificate = file.read()
+        else:
+            ssl_certificate = None
+
+        await dp.bot.set_webhook(
+            url=config.tg_webhook_url,
+            certificate=ssl_certificate
+        )
 
     log.warning("START BOT!")
 
@@ -28,7 +38,7 @@ async def on_shutdown(dp: Dispatcher):
 def run():
     # Logging configuration
     log.basicConfig(
-        level=config.log_level,
+        level=log.getLevelName(config.log_level),
         format=config.log_format
     )
 
@@ -51,10 +61,19 @@ def run():
             on_startup=on_startup,
             on_shutdown=on_shutdown,
             loop=event_loop,
-            skip_updates=True
+            skip_updates=config.tg_skip_updates
         )
 
     elif config.tg_update_method == UpdateMethod.WEBHOOKS:
+        if config.ssl_is_set:
+            ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+            ssl_context.load_cert_chain(
+                config.ssl_certificate_path,
+                config.ssl_private_key_path
+            )
+        else:
+            ssl_context = None
+
         executor.start_webhook(
             dispatcher=dp,
             on_startup=on_startup,
@@ -63,7 +82,8 @@ def run():
             webhook_path=config.tg_webhook_path,
             host=config.webapp_host,
             port=config.webapp_port,
-            skip_updates=True
+            ssl_context=ssl_context,
+            skip_updates=config.tg_skip_updates
         )
 
 
