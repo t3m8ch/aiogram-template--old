@@ -61,7 +61,7 @@ def run():
             on_startup=on_startup,
             on_shutdown=on_shutdown,
             loop=event_loop,
-            skip_updates=True
+            skip_updates=config.tg_skip_updates
         )
 
     elif config.tg_update_method == UpdateMethod.WEBHOOKS:
@@ -83,7 +83,7 @@ def run():
             host=config.webapp_host,
             port=config.webapp_port,
             ssl_context=ssl_context,
-            skip_updates=True
+            skip_updates=config.tg_skip_updates
         )
 
 
