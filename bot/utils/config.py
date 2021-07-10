@@ -17,14 +17,14 @@ class UpdateMethod(str, Enum):
     LONG_POLLING = "long_polling"
 
 
-class LogLevel(int, Enum):
-    CRITICAL = log.CRITICAL
-    FATAL = log.FATAL
-    ERROR = log.ERROR
-    WARNING = log.WARNING
-    WARN = log.WARN
-    INFO = log.INFO
-    DEBUG = log.DEBUG
+class LogLevel(str, Enum):
+    CRITICAL = "CRITICAL"
+    FATAL = "FATAL"
+    ERROR = "ERROR"
+    WARNING = "WARNING"
+    WARN = "WARN"
+    INFO = "INFO"
+    DEBUG = "DEBUG"
 
 
 class Config(BaseSettings):
