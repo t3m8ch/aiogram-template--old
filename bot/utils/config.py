@@ -40,6 +40,9 @@ class Config(BaseSettings):
 
     db_url: str = DEFAULT_DB_URL
 
+    ssl_certificate_path: Optional[str]
+    ssl_private_key_path: Optional[str]
+
     @property
     def tg_update_method(self) -> UpdateMethod:
         return UpdateMethod.LONG_POLLING if not self.tg_webhook_host else UpdateMethod.WEBHOOKS
@@ -59,6 +62,13 @@ class Config(BaseSettings):
         # LOG_FORMAT must be specified in the code,
         # because The format depends on the logging library used
         return LOG_FORMAT
+
+    @property
+    def ssl_is_set(self):
+        return all([
+            self.ssl_certificate_path is not None,
+            self.ssl_private_key_path is not None,
+        ])
 
 
 config = Config(
