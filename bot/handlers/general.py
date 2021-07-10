@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher.filters import CommandStart
 
-from bot.misc import Router
+from bot.utils import Router
 
 router = Router()
 

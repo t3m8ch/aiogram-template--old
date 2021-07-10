@@ -5,7 +5,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.utils import executor
 
-from config import config, UpdateMethod
+from bot.utils.config import config, UpdateMethod
 from handlers import register_handlers
 
 
