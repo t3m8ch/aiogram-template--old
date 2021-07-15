@@ -1,4 +1,3 @@
-import asyncio
 import logging as log
 import ssl
 import sys
@@ -10,11 +9,12 @@ from aiogram.utils import executor
 from dependency_injector.wiring import Provide
 
 from bot import di
-from bot.utils.config import config, UpdateMethod
+from bot.utils.config import UpdateMethod, Config
 from handlers import register_handlers
 
 
-async def on_startup(dp: Dispatcher):
+async def on_startup(dp: Dispatcher,
+                     config: Config = Provide[di.Container.config]):
     if config.tg_update_method == UpdateMethod.WEBHOOKS:
         if config.ssl_is_set:
             with open(config.ssl_certificate_path, 'rb') as file:
@@ -39,7 +39,8 @@ async def on_shutdown(dp: Dispatcher):
     log.warning("BOT STOPPED!")
 
 
-def run(event_loop=Provide[di.Container.event_loop]):
+def run(event_loop=Provide[di.Container.event_loop],
+        config: Config = Provide[di.Container.config]):
     # Logging configuration
     log.basicConfig(
         level=log.getLevelName(config.log_level),

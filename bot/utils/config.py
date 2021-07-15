@@ -78,9 +78,3 @@ class Config(BaseSettings):
             self.ssl_certificate_path is not None,
             self.ssl_private_key_path is not None,
         ])
-
-
-config = Config(
-    _env_file=".env",
-    _env_file_encoding="utf-8"
-)
