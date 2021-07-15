@@ -1,7 +1,10 @@
+import sys
+
 from . import general
+from bot import di
 
 
-def register_handlers(dp):
+def register_handlers(dp, di_container: di.Container):
     """A function that registers all handlers.
     Example of registration of several handlers:
 
@@ -15,3 +18,5 @@ def register_handlers(dp):
     Remember that the order of handlers is important!
     """
     general.router.register_handlers(dp)
+
+    di_container.wire(packages=[sys.modules[__name__]])
