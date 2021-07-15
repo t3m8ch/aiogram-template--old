@@ -1,12 +1,15 @@
 import asyncio
 import logging as log
 import ssl
+import sys
 
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage
 from aiogram.utils import executor
+from dependency_injector.wiring import Provide
 
+from bot import di
 from bot.utils.config import config, UpdateMethod
 from handlers import register_handlers
 
@@ -36,15 +39,12 @@ async def on_shutdown(dp: Dispatcher):
     log.warning("BOT STOPPED!")
 
 
-def run():
+def run(event_loop=Provide[di.Container.event_loop]):
     # Logging configuration
     log.basicConfig(
         level=log.getLevelName(config.log_level),
         format=config.log_format
     )
-
-    # Event loop
-    event_loop = asyncio.get_event_loop()
 
     # Storage
     if config.is_redis:
@@ -102,4 +102,7 @@ def run():
 
 
 if __name__ == "__main__":
+    di_container = di.Container()
+    di_container.wire(modules=[sys.modules[__name__]])
+
     run()
