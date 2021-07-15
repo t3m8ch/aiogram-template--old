@@ -15,7 +15,8 @@ from bot.utils.on_startup import on_startup
 from handlers import register_handlers
 
 
-def run(event_loop=Provide[di.Container.event_loop],
+def run(di_container,
+        event_loop=Provide[di.Container.event_loop],
         config: Config = Provide[di.Container.config]):
     # Logging configuration
     log.basicConfig(
@@ -43,7 +44,7 @@ def run(event_loop=Provide[di.Container.event_loop],
     dp = Dispatcher(bot, storage=storage)
 
     # Register
-    register_handlers(dp)
+    register_handlers(dp, di_container)
 
     # Start bot!
     if config.tg_update_method == UpdateMethod.LONG_POLLING:
@@ -79,7 +80,7 @@ def run(event_loop=Provide[di.Container.event_loop],
 
 
 if __name__ == "__main__":
-    di_container = di.Container()
-    di_container.wire(modules=[sys.modules[__name__]], packages=[handlers])
+    _di_container = di.Container()
+    _di_container.wire(modules=[sys.modules[__name__]])
 
-    run()
+    run(_di_container)

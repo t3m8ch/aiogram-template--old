@@ -5,6 +5,7 @@ from dependency_injector.wiring import Provide, inject
 from bot import di
 from bot.service.random_numbers import RandomNumbersService
 from bot.utils import Router
+from bot.utils.config import Config
 
 router = Router()
 
@@ -14,8 +15,10 @@ router = Router()
 @inject
 async def cmd_random_number(message: types.Message,
                             random_numbers_service: RandomNumbersService
-                            = Provide[di.Container.random_numbers_service]):
+                            = Provide[di.Container.random_numbers_service],
+                            config: Config = Provide[di.Container.config]):
     await message.reply(str(random_numbers_service.generate_random_number()))
+    print(config)
 
 
 # -------- /start --------
