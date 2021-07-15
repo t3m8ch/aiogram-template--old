@@ -2,6 +2,7 @@ import asyncio
 
 from dependency_injector import containers, providers
 
+from bot.service.random_numbers import RandomNumbersService
 from bot.utils.config import Config
 
 
@@ -13,3 +14,5 @@ class Container(containers.DeclarativeContainer):
     )
 
     event_loop = providers.Singleton(asyncio.get_event_loop)
+
+    random_numbers_service = providers.Factory(RandomNumbersService)

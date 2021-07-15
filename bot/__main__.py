@@ -8,7 +8,7 @@ from aiogram.contrib.fsm_storage.redis import RedisStorage
 from aiogram.utils import executor
 from dependency_injector.wiring import Provide
 
-from bot import di
+from bot import di, handlers
 from bot.utils.config import UpdateMethod, Config
 from bot.utils.on_shutdown import on_shutdown
 from bot.utils.on_startup import on_startup
@@ -80,6 +80,6 @@ def run(event_loop=Provide[di.Container.event_loop],
 
 if __name__ == "__main__":
     di_container = di.Container()
-    di_container.wire(modules=[sys.modules[__name__]])
+    di_container.wire(modules=[sys.modules[__name__]], packages=[handlers])
 
     run()
