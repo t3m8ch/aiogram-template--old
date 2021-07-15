@@ -10,24 +10,8 @@ from dependency_injector.wiring import Provide
 
 from bot import di
 from bot.utils.config import UpdateMethod, Config
+from bot.utils.on_startup import on_startup
 from handlers import register_handlers
-
-
-async def on_startup(dp: Dispatcher,
-                     config: Config = Provide[di.Container.config]):
-    if config.tg_update_method == UpdateMethod.WEBHOOKS:
-        if config.ssl_is_set:
-            with open(config.ssl_certificate_path, 'rb') as file:
-                ssl_certificate = file.read()
-        else:
-            ssl_certificate = None
-
-        await dp.bot.set_webhook(
-            url=config.tg_webhook_url,
-            certificate=ssl_certificate
-        )
-
-    log.warning("START BOT!")
 
 
 async def on_shutdown(dp: Dispatcher):
