@@ -10,17 +10,9 @@ from dependency_injector.wiring import Provide
 
 from bot import di
 from bot.utils.config import UpdateMethod, Config
+from bot.utils.on_shutdown import on_shutdown
 from bot.utils.on_startup import on_startup
 from handlers import register_handlers
-
-
-async def on_shutdown(dp: Dispatcher):
-    await dp.bot.delete_webhook()
-
-    await dp.storage.close()
-    await dp.storage.wait_closed()
-
-    log.warning("BOT STOPPED!")
 
 
 def run(event_loop=Provide[di.Container.event_loop],
