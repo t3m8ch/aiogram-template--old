@@ -30,7 +30,7 @@ class Router:
         >>> from aiogram import types, Dispatcher
         >>> from aiogram.dispatcher.filters import CommandStart
         >>>
-        >>> from bot.misc.router import Router
+        >>> from bot.utils.router import Router
         >>>
         >>> router = Router()
         >>>
